@@ -40,22 +40,26 @@ func init() {
 
 	}
 
-	flag.IntVar(&runtime, "runtime", 300, "Run time fot testing")
+	flag.IntVar(&runtime, "runtime", 10, "Run time fot testing")
 	flag.IntVar(&rate, "rate", 500000, "Writing rate of log")
 
 	flag.Parse()
 	fmt.Println(runtime, rate)
 }
 
+func printLogs(count, num int) {
+	for j:=0; j < num; j++ {
+		fmt.Printf("{\"log\":\"%d_%s\", \"stream\":\"stdout\",\"time\":\"%s\"}\"\n", count, RandStringBytes(64), time.Now())
+		count++
+	}
+}
 func main() {
 	var t  *time.Timer
 	count := 0
 	for i:=0; i<runtime; i++ {
 		t = time.NewTimer(1 * time.Second)
-		for j:=0; j < rate; j++ {
-			fmt.Println(count, RandStringBytes(64))
-			count++
-		}
+		go printLogs(count, rate)
+		count += rate
 		<- t.C
 	}
 }
