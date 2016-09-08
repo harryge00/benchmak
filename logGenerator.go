@@ -41,25 +41,29 @@ func init() {
 	}
 
 	flag.IntVar(&runtime, "runtime", 10, "Run time fot testing")
-	flag.IntVar(&rate, "rate", 500000, "Writing rate of log")
+	flag.IntVar(&rate, "rate", 5000, "Writing rate of log")
 
 	flag.Parse()
-	fmt.Println(runtime, rate)
 }
 
 func printLogs(count, num int) {
 	for j:=0; j < num; j++ {
-		fmt.Printf("{\"log\":\"%d_%s\", \"stream\":\"stdout\",\"time\":\"%s\"}\"\n", count, RandStringBytes(64), time.Now())
+		fmt.Printf("{\"log\":\"%d_%s\", \"stream\":\"stdout\",\"time\":\"%s\"}\n", count, RandStringBytes(64), time.Now())
 		count++
 	}
 }
 func main() {
-	var t  *time.Timer
 	count := 0
-	for i:=0; i<runtime; i++ {
-		t = time.NewTimer(1 * time.Second)
-		go printLogs(count, rate)
-		count += rate
-		<- t.C
+	ticker := time.NewTicker(time.Duration(1000000000/rate) * time.Nanosecond)
+	for j := 0; j < runtime; j++ {
+		i := 0
+		for range ticker.C {
+			fmt.Printf("{\"log\":\"%d_%s\", \"stream\":\"stdout\",\"time\":\"%s\"}\n", count, RandStringBytes(64), time.Now().Format("2006-01-02T15:04:05.999999999Z"))
+			count++
+			i++
+			if i >= rate {
+				break
+			}
+		}
 	}
 }
