@@ -14,7 +14,7 @@ import (
 
 // Program option vars:
 var (
-	runtime   int
+	runtime int
 	rate int
 )
 
@@ -53,6 +53,7 @@ func printLogs(count, num int) {
 	}
 }
 func main() {
+	rand.Seed(time.Now().UTC().UnixNano());
 	count := 0
 	ticker := time.NewTicker(time.Duration(1000000000/rate) * time.Nanosecond)
 	for j := 0; j < runtime; j++ {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "es_query.js",
   "dependencies": {
-    "elasticsearch": "^11.0.1"
+    "elasticsearch": "^11.0.1",
+    "line-by-line": "^0.1.5",
   },
   "devDependencies": {},
   "scripts": {
