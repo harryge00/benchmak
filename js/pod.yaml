@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: queryes
+spec:
+  containers:
+  - env:
+    - name: FILE
+      value: /var/lib/docker/containers/adcc1eb2fe6d8f4c969453249247f57048baae4edac7fd7ec8e187df35567276/adcc1eb2fe6d8f4c969453249247f57048baae4edac7fd7ec8e187df35567276-json.log
+    - name: ES
+      value: elasticsearch-logging.kube-system:9200
+    - name: TOTAL
+      value: "3000000"
+    - name: INDEX
+      value: logstash-2016.09.10
+    image: index.caicloud.io/caicloud/es_query
+    name: esquery
+    volumeMounts:
+    - mountPath: /var/lib/docker/containers
+      name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      # directory location on host
+      path: /var/lib/docker/containers

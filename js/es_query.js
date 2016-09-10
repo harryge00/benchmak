@@ -8,7 +8,7 @@ var client = new elasticsearch.Client({
 var total = process.env.TOTAL;
 var count = 0;
 var miss = 0;
-var index = process.env.INDEX || "logstash-2016.09.08";
+var index = process.env.INDEX || "logstash-*";
 var totalTime = 0;
 var totalQueries = 0;
 if (!process.env.FILE) {
@@ -25,7 +25,6 @@ lr.on('error', function (err) {
 lr.on('line', function (line) {
   // lr.pause();
   var log = JSON.parse(line).log;
-  // console.log(log);
   client.search({
     "index": index,
     "body": {
@@ -48,12 +47,13 @@ lr.on('line', function (line) {
       miss++;
     }
     // lr.resume();
-    if(totalQueries > total - 10) {
+    if( (totalQueries > total - 10) || (totalQueries % 5000 == 0) ) {
       console.info("Total:", totalQueries, "Miss:", miss, "hits", count);
       console.info("average time for executing the search:", totalTime/totalQueries, "ms");
     }
   }, function (error) {
-    console.trace(error.message);
+    console.error("search error!");
+    console.trace(error);
     // lr.resume();
   });
 });
