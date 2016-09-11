@@ -36,7 +36,8 @@ func main() {
 	for j := 0; j < runtime; j++ {
 		i := 0
 		for range ticker.C {
-			fmt.Printf("%d_%s\n", count, RandStringBytes(64))
+			fmt.Printf("{\"log\":\"%d_%s\", \"stream\":\"stdout\",\"time\":\"%s\"}\n", count, RandStringBytes(64), time.Now().Format("2006-01-02T15:04:05.999999999Z"))
+			// fmt.Printf("%d_%s\n", count, RandStringBytes(64))
 			count++
 			i++
 			if i >= rate {
