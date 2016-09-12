@@ -23,8 +23,13 @@ lr.on('error', function (err) {
      // 'err' contains error object
      console.error(err);
 });
+var concurrent = 0;
 lr.on('line', function (line) {
   lr.pause();
+  // if(concurrent > 5) {
+  //   setTimeout(null, 60);
+  // }
+  // concurrent++;
   var log = JSON.parse(line).log;
   client.search({
     "index": index,
@@ -39,19 +44,20 @@ lr.on('line', function (line) {
       }
     }
   }).then(function (body) {
+    lr.resume();
+    concurrent--;
     totalTime += body.took;
     totalQueries++;
     if(body.hits.total == 1) {
       count++;
     } else if(body.hits.total > 1) {
-      // console.log(log, " has hits:", body.hits.total);
+      console.log(log, " has hits:", body.hits.total);
       count++;
     } else {
       console.error("miss ", log);
       miss++;
     }
-    lr.resume();
-    if( (totalQueries > total - 10) || (totalQueries % 1000 == 0) ) {
+    if( (totalQueries > total - 10) || (totalQueries % 2000 == 0) ) {
       console.info("Total:", totalQueries, "Miss:", miss, "hits", count);
       console.info("average time for executing the search:", totalTime/totalQueries, "ms");
     }

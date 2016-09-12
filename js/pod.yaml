@@ -6,13 +6,15 @@ spec:
   containers:
   - env:
     - name: FILE
-      value: /var/lib/docker/containers/adcc1eb2fe6d8f4c969453249247f57048baae4edac7fd7ec8e187df35567276/adcc1eb2fe6d8f4c969453249247f57048baae4edac7fd7ec8e187df35567276-json.log
+      value: /var/lib/docker/containers/a951f89437ad697417b0ee61ff46a67a9dcf1cb2726149127c1fddbbd12d984c/a951f89437ad697417b0ee61ff46a67a9dcf1cb2726149127c1fddbbd12d984c-json.log
     - name: ES
       value: elasticsearch-logging.kube-system:9200
     - name: TOTAL
-      value: "3000000"
+      value: "300000"
     - name: INDEX
-      value: logstash-2016.09.10
+      value: logstash-2016.09.12
+    - name: POD_NAME
+      value: test-pd
     image: index.caicloud.io/caicloud/es_query
     name: esquery
     volumeMounts:

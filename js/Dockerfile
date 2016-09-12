@@ -7,4 +7,4 @@ ADD . /app
 RUN echo "Asia/Shanghai" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-CMD ["node", "es_query.js"]
+CMD ["node", "es_query_k8s.js"]

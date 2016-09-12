@@ -11,3 +11,12 @@ spec:
       value: "500"
     image: index.caicloud.io/caicloud/loggenerator
     name: loggenerator
+    volumeMounts:
+    - mountPath: /var/lib/docker/containers
+      name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      # directory location on host
+      path: /test/logs
+  nodeName: i-sgiqmbxb
