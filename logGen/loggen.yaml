@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - env:
+    - name: runtime
+      value: "600"
+    - name: rate
+      value: "500"
+    image: index.caicloud.io/caicloud/loggenerator
+    name: loggenerator
