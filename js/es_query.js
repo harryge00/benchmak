@@ -22,8 +22,13 @@ lr.on('error', function (err) {
      // 'err' contains error object
      console.error(err);
 });
+var concurrent = 0;
 lr.on('line', function (line) {
   // lr.pause();
+  if(concurrent > 10) {
+    setTimeout(null, 20);
+  }
+  concurrent++;
   var log = JSON.parse(line).log;
   client.search({
     "index": index,
@@ -35,12 +40,13 @@ lr.on('line', function (line) {
       }
     }
   }).then(function (body) {
+    concurrent--;
     totalTime += body.took;
     totalQueries++;
     if(body.hits.total == 1) {
       count++;
     } else if(body.hits.total > 1) {
-      // console.log(log, " has hits:", body.hits.total);
+      console.log(log, " has hits:", body.hits.total);
       count++;
     } else {
       console.error("miss ", log);
