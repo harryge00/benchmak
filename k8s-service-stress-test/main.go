@@ -50,7 +50,6 @@ func main() {
   for i := 0; i < svcNum; i++ {
     svcName := "echo-" + baseName + strconv.Itoa(i)
     svc.ObjectMeta.Name = svcName
-    fmt.Println(svc)
     if _, err := client.Services("default").Create(&svc); err != nil {
       //error when creating this svc
       fmt.Println(err)
@@ -59,21 +58,21 @@ func main() {
     }
     svcNameMap[svcName] = true
     if i % 10 == 0 {
+      time.Sleep(5 * time.Second)
+      fmt.Println("num:", i)
       for svcName := range svcNameMap {
         if svcNameMap[svcName] {
           //skip svc not created
           url := "http://" + svcName + ":9998"
-          fmt.Println(url )
           resp, err := http.Get(url)
           if err != nil {
-              log.Fatal("error:", err)
-              continue
+            log.Fatal("error:", err)
+            continue
           }
-          fmt.Println("response Status:", resp.Status)
-          fmt.Println("response Headers:", resp.Header)
-          fmt.Println("response Body:", resp.Body)
-          if resp.StatusCode != 204 {
-            fmt.Println("Error req")
+          if resp.StatusCode != 200 {
+            fmt.Println("response Status:", resp.Status)
+            fmt.Println("response Headers:", resp.Header)
+            fmt.Println("response Body:", resp.Body)
           }
         }
       }
