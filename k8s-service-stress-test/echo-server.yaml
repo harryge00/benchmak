@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: echo-server
+  labels:
+    k8s-app: echo-server
+spec:
+  replicas: 1
+  selector:
+    k8s-app: echo-server
+  template:
+    metadata:
+      labels:
+        k8s-app: echo-server
+    spec:
+      containers:
+      - image: index.caicloud.io/caicloud/go-echoserver
+        name: echo-server
+        ports:
+          - containerPort: 9998
+            hostPort: 9998
+          - containerPort: 9999
+            hostPort: 9999
